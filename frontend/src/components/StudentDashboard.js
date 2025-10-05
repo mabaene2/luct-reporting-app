@@ -27,6 +27,10 @@ const StudentDashboard = () => {
   const [monitoringData, setMonitoringData] = useState([]);
   const [materials, setMaterials] = useState([]);
 
+  // Get student ID from localStorage
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const studentId = user.id || user.student_id;
+
   // Sample data to prevent empty states
   const sampleClasses = [
     {
@@ -125,21 +129,39 @@ const StudentDashboard = () => {
   });
 
   useEffect(() => {
-    fetchDashboardData();
-    fetchAllCourses();
-    fetchStudentData();
-    fetchMonitoringData();
-    fetchMaterials();
-  }, []);
+    if (studentId) {
+      fetchDashboardData();
+      fetchAllCourses();
+      fetchStudentData();
+      fetchMonitoringData();
+      fetchMaterials();
+    } else {
+      console.error('Student ID not found in localStorage');
+      // Load sample data if no student ID
+      setClasses(sampleClasses);
+      setAttendance(sampleAttendance);
+      setMaterials(sampleMaterials);
+      setAllCourses([
+        { id: 1, course_name: 'Java Programming', course_code: 'BIT2101', lecturer_name: 'Dr. Smith', lecturer_id: 1 },
+        { id: 2, course_name: 'Web Development', course_code: 'BIT2201', lecturer_name: 'Dr. Johnson', lecturer_id: 2 },
+        { id: 3, course_name: 'Database Management', course_code: 'BIT2301', lecturer_name: 'Dr. Wilson', lecturer_id: 3 }
+      ]);
+      setDashboardData({
+        student: { name: 'John Doe', program: 'Computer Science' }
+      });
+    }
+  }, [studentId]);
 
   const fetchDashboardData = async () => {
+    if (!studentId) return;
+    
     try {
-      const response = await getStudentDashboard();
+      const response = await getStudentDashboard(studentId);
       setDashboardData(response.data);
     } catch (error) {
       console.error('Error fetching dashboard:', error);
       setDashboardData({
-        student: { name: 'John Doe', program: 'Computer Science' }
+        student: { name: user.name || 'Student', program: 'Computer Science' }
       });
     }
   };
@@ -159,13 +181,13 @@ const StudentDashboard = () => {
   };
 
   const fetchStudentData = async () => {
+    if (!studentId) return;
+    
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      
-      const classesRes = await getStudentClasses(user.id);
+      const classesRes = await getStudentClasses(studentId);
       setClasses(classesRes.data || sampleClasses);
 
-      const attendanceRes = await getStudentAttendance(user.id);
+      const attendanceRes = await getStudentAttendance(studentId);
       setAttendance(attendanceRes.data || sampleAttendance);
 
     } catch (error) {
@@ -176,9 +198,10 @@ const StudentDashboard = () => {
   };
 
   const fetchMonitoringData = async () => {
+    if (!studentId) return;
+    
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const response = await getStudentMonitoring(user.id);
+      const response = await getStudentMonitoring(studentId);
       setMonitoringData(response.data || []);
     } catch (error) {
       console.error('Error fetching monitoring data:', error);
@@ -215,12 +238,11 @@ const StudentDashboard = () => {
     setLoading(true);
 
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
       const selectedCourse = allCourses.find(course => course.id == attendanceForm.course_id);
       
       const attendanceData = {
         ...attendanceForm,
-        student_id: user.id,
+        student_id: studentId,
         student_name: user.name || 'Student',
         course_name: selectedCourse?.course_name || 'Unknown Course',
         course_code: selectedCourse?.course_code || 'N/A'
@@ -288,12 +310,11 @@ const StudentDashboard = () => {
     setLoading(true);
 
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
       const selectedCourse = allCourses.find(course => course.id == monitoringForm.course_id);
       
       const monitoringData = {
         ...monitoringForm,
-        student_id: user.id,
+        student_id: studentId,
         student_name: user.name || 'Student',
         course_name: selectedCourse?.course_name || 'Unknown Course'
       };
@@ -332,10 +353,14 @@ const StudentDashboard = () => {
       return;
     }
 
+    if (!studentId) {
+      alert('Student ID not found. Please log in again.');
+      return;
+    }
+
     setSubmitting(prev => ({ ...prev, [courseId]: true }));
 
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
       const course = allCourses.find(c => c.id == courseId);
       
       // FIXED: Use the correct API structure
@@ -344,7 +369,7 @@ const StudentDashboard = () => {
         course_id: courseId,
         rating: ratings[courseId],
         feedback: feedback[courseId] || '',
-        student_id: user.id,
+        student_id: studentId,
         student_name: user.name || 'Student'
       };
 
@@ -352,7 +377,7 @@ const StudentDashboard = () => {
       
       await createRating(ratingData);
 
-      alert('✅ Rating submitted successfully!');
+      alert('Rating submitted successfully!');
       
       // Clear the rating and feedback for this course
       setRatings(prev => {
@@ -368,16 +393,16 @@ const StudentDashboard = () => {
       });
 
     } catch (error) {
-      console.error('❌ Error submitting rating:', error);
+      console.error('Error submitting rating:', error);
       console.error('Error details:', error.response?.data || error.message);
       
       // More specific error messages
       if (error.response?.status === 500) {
-        alert('❌ Server error: Please check if the ratings table exists in the database.');
+        alert('Server error: Please check if the ratings table exists in the database.');
       } else if (error.response?.data?.error?.includes('Duplicate')) {
-        alert('❌ You have already rated this lecturer for this course.');
+        alert('You have already rated this lecturer for this course.');
       } else {
-        alert('❌ Failed to submit rating. Please try again.');
+        alert('Failed to submit rating. Please try again.');
       }
     } finally {
       setSubmitting(prev => ({ ...prev, [courseId]: false }));
@@ -391,10 +416,14 @@ const StudentDashboard = () => {
       return;
     }
 
+    if (!studentId) {
+      alert('Student ID not found. Please log in again.');
+      return;
+    }
+
     setLoading(true);
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const response = await searchStudentData(searchQuery, user.id);
+      const response = await searchStudentData(searchQuery, studentId);
       setSearchResults(response.data);
     } catch (error) {
       console.error('Search error:', error);
@@ -427,12 +456,29 @@ const StudentDashboard = () => {
     materials: materials
   };
 
+  if (!studentId) {
+    return (
+      <div className="container">
+        <div className="error-state">
+          <h2>Authentication Required</h2>
+          <p>Please log in to access the student dashboard.</p>
+          <button 
+            onClick={() => window.location.href = '/login'}
+            className="btn btn-primary"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <div className="page-header">
         <h1 className="page-title">Student Dashboard</h1>
         <p className="page-subtitle">
-          Welcome back, {dashboardData?.student?.name || dashboardData?.student?.student_name || 'Student'}
+          Welcome back, {dashboardData?.student?.name || dashboardData?.student?.student_name || user.name || 'Student'}
         </p>
       </div>
 
@@ -453,7 +499,7 @@ const StudentDashboard = () => {
             }}
           />
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Searching...' : '🔍 Search'}
+            {loading ? 'Searching...' : 'Search'}
           </button>
           {searchQuery && (
             <button type="button" onClick={handleClearSearch} className="btn btn-outline">
@@ -472,7 +518,7 @@ const StudentDashboard = () => {
           border: '1px solid #b3d9ff'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>🔍 Showing search results for: "{searchQuery}"</span>
+            <span>Showing search results for: "{searchQuery}"</span>
             <button onClick={handleClearSearch} className="btn btn-outline btn-sm">
               Show All
             </button>
@@ -483,19 +529,19 @@ const StudentDashboard = () => {
       {/* Tabs Navigation */}
       <div className="tabs">
         <button className={`tab-btn ${activeTab === 'attendance' ? 'active' : ''}`} onClick={() => setActiveTab('attendance')}>
-           Sign Attendance
+          Sign Attendance
         </button>
         <button className={`tab-btn ${activeTab === 'classes' ? 'active' : ''}`} onClick={() => setActiveTab('classes')}>
-           Add Classes
+          Add Classes
         </button>
         <button className={`tab-btn ${activeTab === 'rating' ? 'active' : ''}`} onClick={() => setActiveTab('rating')}>
-          ⭐ Rate Lecturers
+          Rate Lecturers
         </button>
         <button className={`tab-btn ${activeTab === 'monitoring' ? 'active' : ''}`} onClick={() => setActiveTab('monitoring')}>
           Self Monitoring
         </button>
         <button className={`tab-btn ${activeTab === 'materials' ? 'active' : ''}`} onClick={() => setActiveTab('materials')}>
-           Course Materials
+          Course Materials
         </button>
       </div>
 
@@ -545,7 +591,7 @@ const StudentDashboard = () => {
                 </div>
                 
                 <button type="submit" className="btn btn-primary" disabled={loading}>
-                  {loading ? '🔄 Signing...' : '✅ Sign Attendance'}
+                  {loading ? 'Signing...' : 'Sign Attendance'}
                 </button>
               </form>
             </div>
@@ -628,7 +674,7 @@ const StudentDashboard = () => {
                 </div>
                 
                 <button type="submit" className="btn btn-primary" disabled={loading}>
-                  {loading ? '🔄 Adding...' : '➕ Add Class'}
+                  {loading ? 'Adding...' : 'Add Class'}
                 </button>
               </form>
             </div>
@@ -758,7 +804,7 @@ const StudentDashboard = () => {
                             fontWeight: 'bold'
                           }}
                         >
-                          {submitting[course.id] ? '🔄 Submitting...' : '✅ Submit Rating'}
+                          {submitting[course.id] ? 'Submitting...' : 'Submit Rating'}
                         </button>
                       </div>
                     </div>
@@ -822,7 +868,7 @@ const StudentDashboard = () => {
                 </div>
                 
                 <button type="submit" className="btn btn-primary" disabled={loading}>
-                  {loading ? '🔄 Submitting...' : '💾 Save Monitoring Data'}
+                  {loading ? 'Submitting...' : 'Save Monitoring Data'}
                 </button>
               </form>
             </div>
