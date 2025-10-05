@@ -10,6 +10,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ========== ADD ROOT ROUTE HERE ==========
+app.get("/", (req, res) => {
+  res.json({ 
+    message: 'LUCT Reporting API is running!',
+    version: '1.0.0',
+    status: 'Online',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      auth: '/api/auth',
+      reports: '/api/reports',
+      courses: '/api/courses',
+      monitoring: '/api/monitoring',
+      ratings: '/api/ratings',
+      dashboard: '/api/dashboard',
+      health: '/api/health'
+    },
+    documentation: 'Use /api endpoints to interact with the system'
+  });
+});
+
 // JWT Authentication Middleware
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
