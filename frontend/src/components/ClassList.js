@@ -10,7 +10,7 @@ const ClassList = ({ user }) => {
 
   const fetchClasses = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/classes");
+      const res = await axios.get("https://luct-reporting-app-bw51.onrender.com/api/classes");
       let classesData = res.data;
       if (user.role === 'Lecturer') {
         classesData = classesData.filter(c => c.lecturer_name === user.name);
