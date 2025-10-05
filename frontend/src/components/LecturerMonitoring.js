@@ -23,11 +23,11 @@ const LecturerMonitoringForm = ({ user }) => {
     try {
       setLoading(true);
       // Fetch students under this lecturer
-      const studentsRes = await axios.get(`http://localhost:5000/api/lecturer/${user?.id}/students`);
+      const studentsRes = await axios.get(`https://luct-reporting-app-bw51.onrender.com/api/lecturer/${user?.id}/students`);
       setStudents(studentsRes.data);
 
       // Fetch courses taught by this lecturer
-      const coursesRes = await axios.get(`http://localhost:5000/api/lecturer/${user?.id}/courses`);
+      const coursesRes = await axios.get(`https://luct-reporting-app-bw51.onrender.com/api/lecturer/${user?.id}/courses`);
       setCourses(coursesRes.data);
     } catch (err) {
       console.error("Failed to fetch data:", err);
@@ -44,7 +44,7 @@ const LecturerMonitoringForm = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/monitoring", {
+      await axios.post("https://luct-reporting-app-bw51.onrender.com/api/monitoring", {
         ...formData,
         lecturer_id: user?.id,
         lecturer_name: user?.name
