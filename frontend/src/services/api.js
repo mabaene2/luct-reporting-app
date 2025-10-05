@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://luct-reporting-app-bw51.onrender.com/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json"
@@ -60,7 +60,7 @@ API.interceptors.response.use(
     } else if (error.code === 'ECONNABORTED') {
       alert("⏰ Request timeout. Please try again.");
     } else if (!error.response) {
-      alert("🚫 Cannot connect to server. Please make sure the backend is running on http://localhost:5000");
+      alert("🚫 Cannot connect to server. Please make sure the backend is running on https://luct-reporting-app-bw51.onrender.com");
     }
     
     return Promise.reject(error);
@@ -433,7 +433,7 @@ export const handleApiError = (error) => {
     return `Server error (${error.response.status}). Please try again.`;
   } else if (error.request) {
     // Request made but no response received
-    return "Cannot connect to server. Please make sure the backend is running on http://localhost:5000";
+    return "Cannot connect to server. Please make sure the backend is running on https://luct-reporting-app-bw51.onrender.com";
   } else {
     // Something else happened
     return error.message || "An unexpected error occurred.";
