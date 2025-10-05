@@ -11,7 +11,7 @@ const CourseList = ({ user }) => {
 
   const fetchCourses = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/courses");
+      const res = await axios.get("https://luct-reporting-app-bw51.onrender.com/api/courses");
       let coursesData = res.data;
       if (user.role === 'PRL') {
         coursesData = coursesData.filter(c => c.faculty === user.faculty);
@@ -29,7 +29,7 @@ const CourseList = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/courses", formData);
+      await axios.post("https://luct-reporting-app-bw51.onrender.com/api/courses", formData);
       alert("Course added!");
       setFormData({ name: "", code: "", lecturer_name: "" });
       fetchCourses();
