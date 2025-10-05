@@ -15,7 +15,7 @@ const LectureForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/lectures", formData);
+      await axios.post("https://luct-reporting-app-bw51.onrender.com/api/lectures", formData);
       alert("Lecture assigned successfully!");
       setFormData({ course_id: "", lecturer_id: "", topic: "", date: "", time: "" });
     } catch (err) {
