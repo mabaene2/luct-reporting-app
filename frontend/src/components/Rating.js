@@ -21,7 +21,7 @@ const Rating = ({ user }) => {
   const fetchRatings = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/ratings");
+      const res = await axios.get("https://luct-reporting-app-bw51.onrender.com/api/ratings");
       let ratingsData = res.data;
       
       // Safe filtering based on user role
@@ -42,7 +42,7 @@ const Rating = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/ratings", formData);
+      await axios.post("https://luct-reporting-app-bw51.onrender.com/api/ratings", formData);
       alert("Rating submitted!");
       setFormData({ lecturer_id: "", rating: "" });
       fetchRatings();
