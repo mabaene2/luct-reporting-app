@@ -9,7 +9,7 @@ const FeedbackForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/feedback", formData);
+      await axios.post("https://luct-reporting-app-bw51.onrender.com/api/feedback", formData);
       alert("Feedback submitted!");
       setFormData({ report_id: "", feedback: "" });
     } catch (err) {
