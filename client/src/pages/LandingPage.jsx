@@ -48,7 +48,7 @@ const LandingPage = () => {
   ];
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppBar position="fixed" elevation={trigger ? 4 : 0}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -73,13 +73,18 @@ const LandingPage = () => {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ pt: 8 }}>
-        {/* Hero Section */}
+      {/* Main content area that grows to fill space */}
+      <Box sx={{ flexGrow: 1, pt: 8 }}>
+        {/* Hero Section - Now fills entire remaining space */}
         <Box
           sx={{
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
-            py: 10,
+            height: '100%', // Fill all available space
+            minHeight: 'calc(100vh - 64px - 80px)', // Viewport minus navbar and footer
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             textAlign: 'center',
           }}
         >
@@ -131,21 +136,24 @@ const LandingPage = () => {
             </Fade>
           </Container>
         </Box>
+      </Box>
 
-        {/* REMOVED: Features Section - COMPLETELY DELETED */}
-
-        {/* REMOVED: Statistics Section - COMPLETELY DELETED */}
-
-        {/* REMOVED: CTA Section - COMPLETELY DELETED */}
-
-        {/* Footer - ONLY YEAR CHANGED */}
-        <Box sx={{ backgroundColor: 'primary.main', color: 'white', py: 4 }}>
-          <Container maxWidth="lg">
-            <Typography variant="body2" textAlign="center">
-              © 2025 LUCT Reporting System. All rights reserved.
-            </Typography>
-          </Container>
-        </Box>
+      {/* Footer - Fixed at bottom */}
+      <Box 
+        component="footer"
+        sx={{ 
+          backgroundColor: 'primary.main', 
+          color: 'white', 
+          py: 2,
+          width: '100%',
+          flexShrink: 0 // Prevents footer from shrinking
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography variant="body2" textAlign="center">
+            © 2025 LUCT Reporting System. All rights reserved.
+          </Typography>
+        </Container>
       </Box>
     </Box>
   );
