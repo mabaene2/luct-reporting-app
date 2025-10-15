@@ -75,20 +75,21 @@ const LandingPage = () => {
 
       {/* Main content area that grows to fill space */}
       <Box sx={{ flexGrow: 1, pt: 8 }}>
-        {/* Hero Section - Now fills entire remaining space */}
+        {/* Hero Section - FULL WIDTH with no side padding */}
         <Box
           sx={{
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
-            height: '100%', // Fill all available space
-            minHeight: 'calc(100vh - 64px - 80px)', // Viewport minus navbar and footer
+            width: '100%', // Full width
+            minHeight: 'calc(100vh - 64px)', // Full viewport minus navbar
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
+            px: 0, // Remove horizontal padding
           }}
         >
-          <Container maxWidth="md">
+          <Box sx={{ width: '100%' }}>
             <Fade in={true} timeout={1000}>
               <Box>
                 <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -134,11 +135,11 @@ const LandingPage = () => {
                 </Box>
               </Box>
             </Fade>
-          </Container>
+          </Box>
         </Box>
       </Box>
 
-      {/* Footer - Fixed at bottom */}
+      {/* Footer - FULL WIDTH with no side padding */}
       <Box 
         component="footer"
         sx={{ 
@@ -146,14 +147,15 @@ const LandingPage = () => {
           color: 'white', 
           py: 2,
           width: '100%',
-          flexShrink: 0 // Prevents footer from shrinking
+          flexShrink: 0,
+          px: 0, // Remove horizontal padding
         }}
       >
-        <Container maxWidth="lg">
-          <Typography variant="body2" textAlign="center">
+        <Box sx={{ width: '100%', textAlign: 'center' }}>
+          <Typography variant="body2">
             © 2025 LUCT Reporting System. All rights reserved.
           </Typography>
-        </Container>
+        </Box>
       </Box>
     </Box>
   );
