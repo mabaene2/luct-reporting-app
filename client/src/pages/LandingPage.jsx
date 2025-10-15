@@ -8,16 +8,48 @@ import {
   AppBar,
   Toolbar,
   Fade,
+  Slide,
+  useScrollTrigger,
 } from '@mui/material';
+import {
+  School as SchoolIcon,
+  Assignment as AssignmentIcon,
+  TrendingUp as TrendingUpIcon,
+  Dashboard as DashboardIcon,
+} from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const trigger = useScrollTrigger();
+
+  const features = [
+    {
+      icon: <AssignmentIcon sx={{ fontSize: 40 }} />,
+      title: 'Comprehensive Reporting',
+      description: 'Create detailed lecture reports with attendance tracking, learning outcomes, and recommendations.',
+    },
+    {
+      icon: <TrendingUpIcon sx={{ fontSize: 40 }} />,
+      title: 'Real-time Monitoring',
+      description: 'Monitor class performance, attendance rates, and teaching effectiveness in real-time.',
+    },
+    {
+      icon: <DashboardIcon sx={{ fontSize: 40 }} />,
+      title: 'Multi-role Access',
+      description: 'Tailored dashboards for students, lecturers, principal lecturers, and program leaders.',
+    },
+    {
+      icon: <SchoolIcon sx={{ fontSize: 40 }} />,
+      title: 'Course Management',
+      description: 'Manage courses, classes, and student information efficiently across faculties.',
+    },
+  ];
 
   return (
-    <Box sx={{ flexGrow: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppBar position="fixed">
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="fixed" elevation={trigger ? 4 : 0}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             LUCT Reporting System
@@ -41,22 +73,19 @@ const LandingPage = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Main Content - Takes full remaining height */}
-      <Box sx={{ flexGrow: 1, pt: 8 }}>
-        {/* Hero Section - Now takes full page height */}
+      <Box sx={{ pt: 8 }}>
+        {/* Hero Section */}
         <Box
           sx={{
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
-            minHeight: 'calc(100vh - 64px)', // Full height minus app bar
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            py: 10,
+            textAlign: 'center',
           }}
         >
           <Container maxWidth="md">
             <Fade in={true} timeout={1000}>
-              <Box sx={{ textAlign: 'center' }}>
+              <Box>
                 <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
                   LUCT Reporting System
                 </Typography>
@@ -67,7 +96,7 @@ const LandingPage = () => {
                   <Button
                     variant="contained"
                     size="large"
-                    onClick={() => navigate(user ? '/dashboard' : '/register')}
+                    onClick={() => navigate('/register')}
                     sx={{
                       backgroundColor: 'white',
                       color: 'primary.main',
@@ -78,49 +107,45 @@ const LandingPage = () => {
                       py: 1.5,
                     }}
                   >
-                    {user ? 'Go to Dashboard' : 'Get Started'}
+                    Get Started
                   </Button>
-                  {!user && (
-                    <Button
-                      variant="outlined"
-                      size="large"
-                      onClick={() => navigate('/login')}
-                      sx={{
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    onClick={() => navigate('/login')}
+                    sx={{
+                      borderColor: 'white',
+                      color: 'white',
+                      '&:hover': {
                         borderColor: 'white',
-                        color: 'white',
-                        '&:hover': {
-                          borderColor: 'white',
-                          backgroundColor: 'rgba(255,255,255,0.1)',
-                        },
-                        px: 4,
-                        py: 1.5,
-                      }}
-                    >
-                      Login
-                    </Button>
-                  )}
+                        backgroundColor: 'rgba(255,255,255,0.1)',
+                      },
+                      px: 4,
+                      py: 1.5,
+                    }}
+                  >
+                    Login
+                  </Button>
                 </Box>
               </Box>
             </Fade>
           </Container>
         </Box>
-      </Box>
 
-      {/* Footer - Fixed at bottom */}
-      <Box 
-        component="footer"
-        sx={{ 
-          backgroundColor: 'primary.main', 
-          color: 'white', 
-          py: 2,
-          width: '100%'
-        }}
-      >
-        <Container maxWidth="lg">
-          <Typography variant="body2" textAlign="center">
-            © 2025 LUCT Reporting System. All rights reserved.
-          </Typography>
-        </Container>
+        {/* REMOVED: Features Section - COMPLETELY DELETED */}
+
+        {/* REMOVED: Statistics Section - COMPLETELY DELETED */}
+
+        {/* REMOVED: CTA Section - COMPLETELY DELETED */}
+
+        {/* Footer - ONLY YEAR CHANGED */}
+        <Box sx={{ backgroundColor: 'primary.main', color: 'white', py: 4 }}>
+          <Container maxWidth="lg">
+            <Typography variant="body2" textAlign="center">
+              © 2025 LUCT Reporting System. All rights reserved.
+            </Typography>
+          </Container>
+        </Box>
       </Box>
     </Box>
   );
