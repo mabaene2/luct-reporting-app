@@ -16,7 +16,7 @@ const LandingPage = () => {
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Navigation Bar */}
-      <AppBar position="static"> {/* Changed from fixed to static */}
+      <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             LUCT Reporting System
@@ -45,7 +45,7 @@ const LandingPage = () => {
         sx={{
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           color: 'white',
-          flex: 1, // This makes it take all available space
+          flex: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -97,7 +97,7 @@ const LandingPage = () => {
         </Box>
       </Box>
 
-      {/* Footer - Always at bottom */}
+      {/* Footer */}
       <Box 
         component="footer"
         sx={{ 
