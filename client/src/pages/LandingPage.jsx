@@ -24,29 +24,6 @@ const LandingPage = () => {
   const { user } = useAuth();
   const trigger = useScrollTrigger();
 
-  const features = [
-    {
-      icon: <AssignmentIcon sx={{ fontSize: 40 }} />,
-      title: 'Comprehensive Reporting',
-      description: 'Create detailed lecture reports with attendance tracking, learning outcomes, and recommendations.',
-    },
-    {
-      icon: <TrendingUpIcon sx={{ fontSize: 40 }} />,
-      title: 'Real-time Monitoring',
-      description: 'Monitor class performance, attendance rates, and teaching effectiveness in real-time.',
-    },
-    {
-      icon: <DashboardIcon sx={{ fontSize: 40 }} />,
-      title: 'Multi-role Access',
-      description: 'Tailored dashboards for students, lecturers, principal lecturers, and program leaders.',
-    },
-    {
-      icon: <SchoolIcon sx={{ fontSize: 40 }} />,
-      title: 'Course Management',
-      description: 'Manage courses, classes, and student information efficiently across faculties.',
-    },
-  ];
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" elevation={trigger ? 4 : 0}>
@@ -73,13 +50,15 @@ const LandingPage = () => {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ pt: 0 }}> {/* REMOVED padding-top to eliminate white space below navbar */}
-        {/* Hero Section - FILLS THE SPACE BELOW NAVBAR */}
+      {/* REMOVE THE WHITE SPACE - CHANGE pt: 8 to pt: 0 */}
+      <Box sx={{ pt: 0 }}> {/* This line fixes the white space */}
+        
+        {/* Hero Section - This will now start immediately below navbar */}
         <Box
           sx={{
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
-            height: '100vh', // Fills entire viewport
+            minHeight: '100vh', // Fill entire screen
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -135,8 +114,8 @@ const LandingPage = () => {
           </Container>
         </Box>
 
-        {/* Footer - FULL WIDTH */}
-        <Box sx={{ backgroundColor: 'primary.main', color: 'white', py: 4, width: '100%' }}>
+        {/* Footer */}
+        <Box sx={{ backgroundColor: 'primary.main', color: 'white', py: 4 }}>
           <Container maxWidth="lg">
             <Typography variant="body2" textAlign="center">
               © 2025 LUCT Reporting System. All rights reserved.
