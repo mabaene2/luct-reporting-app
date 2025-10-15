@@ -3,21 +3,53 @@ import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
+  Container,
   Typography,
   AppBar,
   Toolbar,
   Fade,
+  Slide,
+  useScrollTrigger,
 } from '@mui/material';
+import {
+  School as SchoolIcon,
+  Assignment as AssignmentIcon,
+  TrendingUp as TrendingUpIcon,
+  Dashboard as DashboardIcon,
+} from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const trigger = useScrollTrigger();
+
+  const features = [
+    {
+      icon: <AssignmentIcon sx={{ fontSize: 40 }} />,
+      title: 'Comprehensive Reporting',
+      description: 'Create detailed lecture reports with attendance tracking, learning outcomes, and recommendations.',
+    },
+    {
+      icon: <TrendingUpIcon sx={{ fontSize: 40 }} />,
+      title: 'Real-time Monitoring',
+      description: 'Monitor class performance, attendance rates, and teaching effectiveness in real-time.',
+    },
+    {
+      icon: <DashboardIcon sx={{ fontSize: 40 }} />,
+      title: 'Multi-role Access',
+      description: 'Tailored dashboards for students, lecturers, principal lecturers, and program leaders.',
+    },
+    {
+      icon: <SchoolIcon sx={{ fontSize: 40 }} />,
+      title: 'Course Management',
+      description: 'Manage courses, classes, and student information efficiently across faculties.',
+    },
+  ];
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Navigation Bar */}
-      <AppBar position="fixed">
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="fixed" elevation={trigger ? 4 : 0}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             LUCT Reporting System
@@ -41,48 +73,45 @@ const LandingPage = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Hero Section - FILLS ENTIRE SCREEN */}
-      <Box
-        sx={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          flexGrow: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          minHeight: '100vh',
-          margin: 0,
-          padding: 0,
-        }}
-      >
-        <Box sx={{ mt: -8 }}> {/* Adjust for navbar */}
-          <Fade in={true} timeout={1000}>
-            <Box>
-              <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                LUCT Reporting System
-              </Typography>
-              <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 4 }}>
-                Streamline your academic reporting with our comprehensive web-based platform
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => navigate(user ? '/dashboard' : '/register')}
-                  sx={{
-                    backgroundColor: 'white',
-                    color: 'primary.main',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255,255,255,0.9)',
-                    },
-                    px: 4,
-                    py: 1.5,
-                  }}
-                >
-                  {user ? 'Go to Dashboard' : 'Get Started'}
-                </Button>
-                {!user && (
+      <Box sx={{ pt: 0 }}> {/* REMOVED padding-top to eliminate white space below navbar */}
+        {/* Hero Section - FILLS THE SPACE BELOW NAVBAR */}
+        <Box
+          sx={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            height: '100vh', // Fills entire viewport
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          <Container maxWidth="md">
+            <Fade in={true} timeout={1000}>
+              <Box>
+                <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  LUCT Reporting System
+                </Typography>
+                <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 4 }}>
+                  Streamline your academic reporting with our comprehensive web-based platform
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => navigate('/register')}
+                    sx={{
+                      backgroundColor: 'white',
+                      color: 'primary.main',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255,255,255,0.9)',
+                      },
+                      px: 4,
+                      py: 1.5,
+                    }}
+                  >
+                    Get Started
+                  </Button>
                   <Button
                     variant="outlined"
                     size="large"
@@ -100,28 +129,20 @@ const LandingPage = () => {
                   >
                     Login
                   </Button>
-                )}
+                </Box>
               </Box>
-            </Box>
-          </Fade>
+            </Fade>
+          </Container>
         </Box>
-      </Box>
 
-      {/* Footer - STRETCHES EDGE TO EDGE */}
-      <Box 
-        component="footer"
-        sx={{ 
-          backgroundColor: 'primary.main', 
-          color: 'white', 
-          py: 2,
-          textAlign: 'center',
-          width: '100%',
-          margin: 0,
-        }}
-      >
-        <Typography variant="body2">
-          © 2025 LUCT Reporting System. All rights reserved.
-        </Typography>
+        {/* Footer - FULL WIDTH */}
+        <Box sx={{ backgroundColor: 'primary.main', color: 'white', py: 4, width: '100%' }}>
+          <Container maxWidth="lg">
+            <Typography variant="body2" textAlign="center">
+              © 2025 LUCT Reporting System. All rights reserved.
+            </Typography>
+          </Container>
+        </Box>
       </Box>
     </Box>
   );
