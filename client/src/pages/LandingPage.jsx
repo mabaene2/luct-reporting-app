@@ -76,23 +76,7 @@ const LandingPage = () => {
             >
               Get Started
             </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              onClick={() => navigate('/login')}
-              sx={{
-                borderColor: 'white',
-                color: 'white',
-                '&:hover': {
-                  borderColor: 'white',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                },
-                px: 4,
-                py: 1.5,
-              }}
-            >
-              Login
-            </Button>
+            {/* LOGIN BUTTON REMOVED FROM HERO SECTION */}
           </Box>
         </Box>
       </Box>
