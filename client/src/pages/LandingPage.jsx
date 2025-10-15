@@ -3,53 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
-  Container,
   Typography,
   AppBar,
   Toolbar,
   Fade,
-  Slide,
-  useScrollTrigger,
 } from '@mui/material';
-import {
-  School as SchoolIcon,
-  Assignment as AssignmentIcon,
-  TrendingUp as TrendingUpIcon,
-  Dashboard as DashboardIcon,
-} from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const trigger = useScrollTrigger();
-
-  const features = [
-    {
-      icon: <AssignmentIcon sx={{ fontSize: 40 }} />,
-      title: 'Comprehensive Reporting',
-      description: 'Create detailed lecture reports with attendance tracking, learning outcomes, and recommendations.',
-    },
-    {
-      icon: <TrendingUpIcon sx={{ fontSize: 40 }} />,
-      title: 'Real-time Monitoring',
-      description: 'Monitor class performance, attendance rates, and teaching effectiveness in real-time.',
-    },
-    {
-      icon: <DashboardIcon sx={{ fontSize: 40 }} />,
-      title: 'Multi-role Access',
-      description: 'Tailored dashboards for students, lecturers, principal lecturers, and program leaders.',
-    },
-    {
-      icon: <SchoolIcon sx={{ fontSize: 40 }} />,
-      title: 'Course Management',
-      description: 'Manage courses, classes, and student information efficiently across faculties.',
-    },
-  ];
 
   return (
-    <Box sx={{ flexGrow: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppBar position="fixed" elevation={trigger ? 4 : 0}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Navigation Bar */}
+      <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             LUCT Reporting System
@@ -73,48 +41,48 @@ const LandingPage = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Main content area that grows to fill space */}
-      <Box sx={{ flexGrow: 1, pt: 8 }}>
-        {/* Hero Section - FULL WIDTH with no side padding */}
-        <Box
-          sx={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            color: 'white',
-            width: '100%', // Full width
-            minHeight: 'calc(100vh - 64px)', // Full viewport minus navbar
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            px: 0, // Remove horizontal padding
-          }}
-        >
-          <Box sx={{ width: '100%' }}>
-            <Fade in={true} timeout={1000}>
-              <Box>
-                <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  LUCT Reporting System
-                </Typography>
-                <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 4 }}>
-                  Streamline your academic reporting with our comprehensive web-based platform
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => navigate('/register')}
-                    sx={{
-                      backgroundColor: 'white',
-                      color: 'primary.main',
-                      '&:hover': {
-                        backgroundColor: 'rgba(255,255,255,0.9)',
-                      },
-                      px: 4,
-                      py: 1.5,
-                    }}
-                  >
-                    Get Started
-                  </Button>
+      {/* Hero Section - FILLS ENTIRE SCREEN */}
+      <Box
+        sx={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          flexGrow: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          minHeight: '100vh',
+          margin: 0,
+          padding: 0,
+        }}
+      >
+        <Box sx={{ mt: -8 }}> {/* Adjust for navbar */}
+          <Fade in={true} timeout={1000}>
+            <Box>
+              <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                LUCT Reporting System
+              </Typography>
+              <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 4 }}>
+                Streamline your academic reporting with our comprehensive web-based platform
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => navigate(user ? '/dashboard' : '/register')}
+                  sx={{
+                    backgroundColor: 'white',
+                    color: 'primary.main',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255,255,255,0.9)',
+                    },
+                    px: 4,
+                    py: 1.5,
+                  }}
+                >
+                  {user ? 'Go to Dashboard' : 'Get Started'}
+                </Button>
+                {!user && (
                   <Button
                     variant="outlined"
                     size="large"
@@ -132,30 +100,28 @@ const LandingPage = () => {
                   >
                     Login
                   </Button>
-                </Box>
+                )}
               </Box>
-            </Fade>
-          </Box>
+            </Box>
+          </Fade>
         </Box>
       </Box>
 
-      {/* Footer - FULL WIDTH with no side padding */}
+      {/* Footer - STRETCHES EDGE TO EDGE */}
       <Box 
         component="footer"
         sx={{ 
           backgroundColor: 'primary.main', 
           color: 'white', 
           py: 2,
+          textAlign: 'center',
           width: '100%',
-          flexShrink: 0,
-          px: 0, // Remove horizontal padding
+          margin: 0,
         }}
       >
-        <Box sx={{ width: '100%', textAlign: 'center' }}>
-          <Typography variant="body2">
-            © 2025 LUCT Reporting System. All rights reserved.
-          </Typography>
-        </Box>
+        <Typography variant="body2">
+          © 2025 LUCT Reporting System. All rights reserved.
+        </Typography>
       </Box>
     </Box>
   );
